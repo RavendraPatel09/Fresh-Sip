@@ -18,6 +18,11 @@ export function ProductCard({ product }: ProductCardProps) {
   const user = useFreshSipStore((state) => state.user);
 
   const isFavorite = user?.favorites?.includes(product.id) || false;
+  const [imgSrc, setImgSrc] = React.useState(product.image);
+
+  React.useEffect(() => {
+    setImgSrc(product.image);
+  }, [product.image]);
 
   return (
     <motion.div
@@ -49,10 +54,12 @@ export function ProductCard({ product }: ProductCardProps) {
           className="relative w-full h-48 my-4 rounded-2xl overflow-hidden cursor-pointer bg-fresh-softBg flex items-center justify-center group-hover:scale-[1.03] transition-transform duration-300"
         >
           <Image
-            src={product.image}
+            src={imgSrc || '/mango-burst.jpg'}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+            onError={() => setImgSrc('/mango-burst.jpg')}
           />
 
           {/* Dynamic Color Accent Overlay */}
