@@ -20,6 +20,49 @@ export function ProceduralBottle({
   const bottleGroup = useRef<THREE.Group>(null);
   const liquidMesh = useRef<THREE.Mesh>(null);
 
+  // Generate crisp high-resolution brand label canvas texture
+  const labelTexture = useMemo(() => {
+    if (typeof window === 'undefined') return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = '#FFFDF8';
+      ctx.fillRect(0, 0, 1024, 512);
+
+      // Gold border accent lines
+      ctx.strokeStyle = '#FFB703';
+      ctx.lineWidth = 12;
+      ctx.strokeRect(30, 30, 964, 452);
+
+      // FreshSip Brand Title
+      ctx.fillStyle = '#1C1917';
+      ctx.font = 'bold 72px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('FreshSip', 512, 130);
+
+      // Subtitle MANGO BURST
+      ctx.fillStyle = '#EA580C';
+      ctx.font = 'bold 84px sans-serif';
+      ctx.fillText('MANGO BURST', 512, 250);
+
+      // COLD-PRESSED JUICE
+      ctx.fillStyle = '#44403C';
+      ctx.font = 'bold 44px sans-serif';
+      ctx.fillText('COLD-PRESSED JUICE', 512, 330);
+
+      // 100% ORGANIC badge
+      ctx.fillStyle = '#15803D';
+      ctx.font = 'bold 36px sans-serif';
+      ctx.fillText('100% ORGANIC • NO ADDED SUGAR', 512, 410);
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    return texture;
+  }, []);
+
   // Animate subtle liquid surface motion
   useFrame((state) => {
     if (bottleGroup.current) {
@@ -37,8 +80,8 @@ export function ProceduralBottle({
       const angle = Math.random() * Math.PI * 2;
       const radius = 0.76;
       const y = (Math.random() - 0.5) * 2.2;
-      const scale = Math.random() * 0.04 + 0.015;
-      coords.push([Math.cos(angle) * radius, y, Math.sin(angle) * radius, scale]);
+      const scaleVal = Math.random() * 0.04 + 0.015;
+      coords.push([Math.cos(angle) * radius, y, Math.sin(angle) * radius, scaleVal]);
     }
     return coords;
   }, []);
@@ -49,14 +92,14 @@ export function ProceduralBottle({
       <mesh position={[0, 0, 0]}>
         <cylinderGeometry args={[0.75, 0.75, 2.6, 32]} />
         <meshPhysicalMaterial
-          roughness={0.05}
-          transmission={0.92}
+          roughness={0.03}
+          transmission={0.94}
           thickness={0.5}
-          ior={1.48}
+          ior={1.52}
           transparent={true}
-          opacity={0.7}
+          opacity={0.75}
           clearcoat={1}
-          clearcoatRoughness={0.1}
+          clearcoatRoughness={0.05}
           color="#FFFFFF"
         />
       </mesh>
@@ -65,12 +108,12 @@ export function ProceduralBottle({
       <mesh position={[0, 1.5, 0]}>
         <cylinderGeometry args={[0.35, 0.75, 0.6, 32]} />
         <meshPhysicalMaterial
-          roughness={0.05}
-          transmission={0.92}
+          roughness={0.03}
+          transmission={0.94}
           thickness={0.5}
-          ior={1.48}
+          ior={1.52}
           transparent={true}
-          opacity={0.7}
+          opacity={0.75}
           clearcoat={1}
           color="#FFFFFF"
         />
@@ -78,12 +121,13 @@ export function ProceduralBottle({
       <mesh position={[0, 1.95, 0]}>
         <cylinderGeometry args={[0.35, 0.35, 0.3, 32]} />
         <meshPhysicalMaterial
-          roughness={0.05}
-          transmission={0.92}
+          roughness={0.03}
+          transmission={0.94}
           thickness={0.5}
-          ior={1.48}
+          ior={1.52}
           transparent={true}
-          opacity={0.7}
+          opacity={0.75}
+          clearcoat={1}
           color="#FFFFFF"
         />
       </mesh>
@@ -116,10 +160,11 @@ export function ProceduralBottle({
       <mesh position={[0, 0, 0]}>
         <cylinderGeometry args={[0.76, 0.76, 1.1, 32, 1, true]} />
         <meshStandardMaterial
+          map={labelTexture || undefined}
           color="#FFFDF8"
-          roughness={0.2}
+          roughness={0.25}
           transparent={true}
-          opacity={0.92}
+          opacity={0.95}
           side={THREE.DoubleSide}
         />
       </mesh>

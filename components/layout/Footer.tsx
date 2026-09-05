@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Instagram, Twitter, Facebook, MapPin, Phone, Mail, Clock, Heart } from 'lucide-react';
+import { Instagram, Twitter, Facebook, Mail, Clock, Heart } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -62,14 +62,6 @@ export function Footer() {
           {/* Contact Info */}
           <div className="space-y-3 text-sm text-gray-400">
             <h4 className="font-display font-semibold text-white text-base mb-4">Visit Our Store</h4>
-            <div className="flex items-start gap-2.5">
-              <MapPin className="w-4 h-4 text-fresh-orange shrink-0 mt-0.5" />
-              <span>108 Ocean Drive, Juice District, Bandra West, Mumbai 400050</span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <Phone className="w-4 h-4 text-fresh-orange shrink-0" />
-              <span>+91 98765 43210</span>
-            </div>
             <div className="flex items-center gap-2.5">
               <Mail className="w-4 h-4 text-fresh-orange shrink-0" />
               <span>hello@freshsip.com</span>

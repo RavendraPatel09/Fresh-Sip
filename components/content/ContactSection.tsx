@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send, Check } from 'lucide-react';
+import { Mail, Clock, Send, Check } from 'lucide-react';
 
 export function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
@@ -35,22 +35,6 @@ export function ContactSection() {
             </p>
 
             <div className="space-y-4 pt-2">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-fresh-orange shrink-0 mt-1" />
-                <div>
-                  <h4 className="font-bold text-sm text-fresh-charcoal">Location</h4>
-                  <p className="text-xs text-fresh-gray">108 Ocean Drive, Juice District, Bandra West, Mumbai 400050</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <Phone className="w-5 h-5 text-fresh-orange shrink-0 mt-1" />
-                <div>
-                  <h4 className="font-bold text-sm text-fresh-charcoal">Phone & Support</h4>
-                  <p className="text-xs text-fresh-gray">+91 98765 43210 (Direct Order Hotline)</p>
-                </div>
-              </div>
-
               <div className="flex items-start gap-3">
                 <Clock className="w-5 h-5 text-fresh-green shrink-0 mt-1" />
                 <div>

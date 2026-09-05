@@ -7,22 +7,22 @@ import { motion } from 'framer-motion';
 
 const GALLERY_IMAGES = [
   {
-    src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'><rect width='800' height='800' fill='%23FFF8EE'/><circle cx='400' cy='400' r='260' fill='%23FF9F1C' opacity='0.3'/><text x='50%' y='45%' dominant-baseline='middle' text-anchor='middle' font-size='160'>🥭</text><text x='50%' y='70%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='36' fill='%23FF9F1C'>Mango Harvest</text></svg>",
+    src: '/assets/images/mango-harvest-real.jpg',
     title: 'Mango Harvest',
     caption: 'Fresh Alphonso mangoes ready for pressing',
   },
   {
-    src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'><rect width='800' height='800' fill='%23FFF3E0'/><circle cx='400' cy='400' r='260' fill='%23FF70A6' opacity='0.3'/><text x='50%' y='45%' dominant-baseline='middle' text-anchor='middle' font-size='160'>🍊</text><text x='50%' y='70%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='36' fill='%23FF70A6'>Valencia Oranges</text></svg>",
+    src: '/assets/images/valencia-oranges-real.jpg',
     title: 'Valencia Oranges',
     caption: 'Cold pressing citrus elixirs',
   },
   {
-    src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'><rect width='800' height='800' fill='%23FFEBEE'/><circle cx='400' cy='400' r='260' fill='%23FF4D6D' opacity='0.3'/><text x='50%' y='45%' dominant-baseline='middle' text-anchor='middle' font-size='160'>🍉</text><text x='50%' y='70%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='36' fill='%23FF4D6D'>Watermelon Chilling</text></svg>",
+    src: '/assets/images/watermelon-chilling-real.jpg',
     title: 'Watermelon Chilling',
     caption: 'Ruby watermelon infused with basil',
   },
   {
-    src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'><rect width='800' height='800' fill='%23E8F5E9'/><circle cx='400' cy='400' r='260' fill='%2338B000' opacity='0.3'/><text x='50%' y='45%' dominant-baseline='middle' text-anchor='middle' font-size='160'>🥬</text><text x='50%' y='70%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='36' fill='%2338B000'>Green Detox Press</text></svg>",
+    src: '/assets/images/green-detox-press-real.jpg',
     title: 'Green Detox Press',
     caption: 'Organic kale & celery chlorophyll extraction',
   },
