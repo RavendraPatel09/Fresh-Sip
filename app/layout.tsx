@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Navbar } from '@/components/ui/Navbar';
-import { Footer } from '@/components/ui/Footer';
-import { InitialLoader } from '@/components/ui/InitialLoader';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
+import { InitialLoader } from '@/components/layout/InitialLoader';
 import { ProductDetailsModal } from '@/components/menu/ProductDetailsModal';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { CheckoutModal } from '@/components/checkout/CheckoutModal';
 import { FreshSipAIAssistant } from '@/components/ai/FreshSipAIAssistant';
-import { AuthModal } from '@/components/user/AuthModal';
+import { AuthModal } from '@/components/auth/AuthModal';
 
 export const metadata: Metadata = {
   title: 'FreshSip Juice Bar — Fresh. Vibrant. Made for You.',

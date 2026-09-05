@@ -2,16 +2,19 @@ import { Product } from '@/types';
 
 const SVG_IMAGES = {
   mango: '/mango-burst.jpg',
-  orange: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23FFF3E0"/><circle cx="300" cy="300" r="200" fill="%23FF70A6" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="130">🍊</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="32" fill="%23FF70A6">Valencia Orange</text></svg>`,
-  watermelon: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23FFEBEE"/><circle cx="300" cy="300" r="200" fill="%23FF4D6D" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="130">🍉</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="32" fill="%23FF4D6D">Watermelon Splash</text></svg>`,
-  pineapple: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23FFFDE7"/><circle cx="300" cy="300" r="200" fill="%23FFB703" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="130">🍍</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="32" fill="%23FFB703">Pineapple Punch</text></svg>`,
-  apple: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23F1F8E9"/><circle cx="300" cy="300" r="200" fill="%2370E000" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="130">🍏</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="32" fill="%2370E000">Apple Fresh</text></svg>`,
-  green: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23E8F5E9"/><circle cx="300" cy="300" r="200" fill="%2338B000" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="130">🥬</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="32" fill="%2338B000">Green Detox</text></svg>`,
-  lemon: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23FFFDE7"/><circle cx="300" cy="300" r="200" fill="%23FFC83D" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="130">🍋</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="32" fill="%23EE9B00">Lemon Ginger</text></svg>`,
-  strawberry: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23FCE4EC"/><circle cx="300" cy="300" r="200" fill="%23FF4D6D" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="130">🍓</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="32" fill="%23FF4D6D">Strawberry Dream</text></svg>`,
-  berry: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23F3E5F5"/><circle cx="300" cy="300" r="200" fill="%237209B7" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="130">🫐</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="32" fill="%237209B7">Banana Berry</text></svg>`,
-  chocolate: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23EFEBE9"/><circle cx="300" cy="300" r="200" fill="%236F1D1B" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="130">🍫</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="32" fill="%236F1D1B">Chocolate Shake</text></svg>`,
-  vanilla: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23FFFDF8"/><circle cx="300" cy="300" r="200" fill="%23FFC83D" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="130">🍦</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="32" fill="%23FFC83D">Vanilla Shake</text></svg>`,
+  orange: '/orange-glow.jpg',
+  watermelon: '/watermelon-splash.jpg',
+  pineapple: '/pineapple-punch.jpg',
+  apple: '/apple-fresh.jpg',
+  green: '/green-detox.jpg',
+  cucumber: '/cucumber-mint.jpg',
+  lemon: '/lemon-ginger.jpg',
+  spinach: '/spinach-glow.jpg',
+  strawberry: '/strawberry-dream.jpg',
+  berry: '/banana-berry.jpg',
+  tropical: '/tropical-mix.jpg',
+  chocolate: '/chocolate-shake.jpg',
+  vanilla: '/vanilla-shake.jpg',
 };
 
 export const SAMPLE_PRODUCTS: Product[] = [
