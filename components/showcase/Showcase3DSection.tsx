@@ -61,11 +61,6 @@ export function Showcase3DSection() {
             <div className="w-full relative">
               <ProductShowcaseCanvas color={currentProduct.accentColor} fruitType={currentProduct.fruitType} />
             </div>
-            {currentProduct.fruitType !== 'mango' && (
-              <p className="text-xs text-center text-gray-400 mt-2 font-medium">
-                🖱️ Drag to rotate 360° bottle • Scroll to zoom
-              </p>
-            )}
           </div>
 
           {/* Right Column: Product Details & Size Selector */}
