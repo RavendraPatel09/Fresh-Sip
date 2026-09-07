@@ -5,20 +5,27 @@ import dynamic from 'next/dynamic';
 import { HeroTextOverlay } from './HeroTextOverlay';
 import { useFreshSipStore } from '@/lib/store';
 
-// Dynamic import for Three.js canvas to optimize SSR
+const HeroVideoScrubber = dynamic(() => import('./HeroVideoScrubber'), {
+  ssr: false,
+});
 const HeroCanvas = dynamic(() => import('../3d/HeroCanvas'), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center text-fresh-gray text-sm">
-      Loading 3D Commercial Experience...
-    </div>
-  ),
 });
 
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [hasVideo, setHasVideo] = useState(false);
   const toggleAI = useFreshSipStore((state) => state.toggleAI);
+
+  useEffect(() => {
+    // Check if MP4 scroll-to-blend video exists in public directory
+    fetch('/freshsip-blend-hero.mp4', { method: 'HEAD' })
+      .then((res) => {
+        if (res.ok) setHasVideo(true);
+      })
+      .catch(() => setHasVideo(false));
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,9 +57,13 @@ export function HeroSection() {
     <section id="home" ref={containerRef} className="relative h-[380vh] w-full bg-fresh-bg">
       {/* Sticky 100vh Viewport */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* 3D Canvas Background */}
+        {/* Scroll-to-Blend Visual Background */}
         <div className="absolute inset-0">
-          <HeroCanvas scrollProgress={scrollProgress} accentColor="#FF9F1C" />
+          {hasVideo ? (
+            <HeroVideoScrubber scrollProgress={scrollProgress} />
+          ) : (
+            <HeroCanvas scrollProgress={scrollProgress} accentColor="#FF9F1C" />
+          )}
         </div>
 
         {/* Cinematic Foreground Typography */}
