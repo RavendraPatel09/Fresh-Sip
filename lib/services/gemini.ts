@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { SAMPLE_PRODUCTS } from './productsData';
+import { SAMPLE_PRODUCTS } from '@/lib/data/productsData';
 import { Product } from '@/types';
 
 // Structured system prompt to ensure grounded responses

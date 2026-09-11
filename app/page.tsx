@@ -1,13 +1,13 @@
-import { HeroSection } from '@/components/hero/HeroSection';
-import { Showcase3DSection } from '@/components/showcase/Showcase3DSection';
-import { OffersSection } from '@/components/content/OffersSection';
-import { HealthBenefits } from '@/components/content/HealthBenefits';
-import { MenuSection } from '@/components/menu/MenuSection';
-import { AboutSection } from '@/components/content/AboutSection';
-import { LoyaltySection } from '@/components/loyalty/LoyaltySection';
-import { GallerySection } from '@/components/content/GallerySection';
-import { TestimonialsSection } from '@/components/content/TestimonialsSection';
-import { ContactSection } from '@/components/content/ContactSection';
+import { HeroSection } from '@/components/home/hero/HeroSection';
+import { Showcase3DSection } from '@/components/home/showcase/Showcase3DSection';
+import { OffersSection } from '@/components/home/sections/OffersSection';
+import { HealthBenefits } from '@/components/home/sections/HealthBenefits';
+import { MenuSection } from '@/components/features/menu/MenuSection';
+import { AboutSection } from '@/components/home/sections/AboutSection';
+import { LoyaltySection } from '@/components/home/sections/LoyaltySection';
+import { GallerySection } from '@/components/home/sections/GallerySection';
+import { TestimonialsSection } from '@/components/home/sections/TestimonialsSection';
+import { ContactSection } from '@/components/home/sections/ContactSection';
 
 export default function HomePage() {
   return (

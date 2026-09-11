@@ -3,11 +3,11 @@ import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { InitialLoader } from '@/components/layout/InitialLoader';
-import { ProductDetailsModal } from '@/components/menu/ProductDetailsModal';
-import { CartDrawer } from '@/components/cart/CartDrawer';
-import { CheckoutModal } from '@/components/checkout/CheckoutModal';
-import { FreshSipAIAssistant } from '@/components/ai/FreshSipAIAssistant';
-import { AuthModal } from '@/components/auth/AuthModal';
+import { ProductDetailsModal } from '@/components/features/menu/ProductDetailsModal';
+import { CartDrawer } from '@/components/features/cart/CartDrawer';
+import { CheckoutModal } from '@/components/features/checkout/CheckoutModal';
+import { FreshSipAIAssistant } from '@/components/features/ai/FreshSipAIAssistant';
+import { AuthModal } from '@/components/features/auth/AuthModal';
 
 export const metadata: Metadata = {
   title: 'FreshSip Juice Bar — Fresh. Vibrant. Made for You.',

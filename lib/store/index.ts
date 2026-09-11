@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Product, CartItem, ProductSize, Order, OrderStatus, UserProfile, HealthGoal, ProductCategory, LoyaltyTier } from '@/types';
-import { SAMPLE_PRODUCTS } from './productsData';
+import { SAMPLE_PRODUCTS } from '@/lib/data/productsData';
 
 interface FreshSipState {
   // Products
