@@ -7,7 +7,7 @@ import { X, ShoppingBag, Star, Flame, Check, ShieldCheck, Heart } from 'lucide-r
 import { ProductSize } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ProductShowcaseCanvas = dynamic(() => import('../3d/ProductShowcaseCanvas'), {
+const ProductShowcaseCanvas = dynamic(() => import('@/components/three-d/ProductShowcaseCanvas'), {
   ssr: false,
 });
 

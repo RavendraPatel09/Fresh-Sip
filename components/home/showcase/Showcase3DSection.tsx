@@ -7,7 +7,7 @@ import { useFreshSipStore } from '@/lib/store';
 import { ShoppingBag, Flame } from 'lucide-react';
 import { ProductSize } from '@/types';
 
-const ProductShowcaseCanvas = dynamic(() => import('../3d/ProductShowcaseCanvas'), {
+const ProductShowcaseCanvas = dynamic(() => import('@/components/three-d/ProductShowcaseCanvas'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-[400px] flex items-center justify-center text-gray-400 text-sm">

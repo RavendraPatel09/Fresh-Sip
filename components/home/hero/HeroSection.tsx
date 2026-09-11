@@ -8,7 +8,7 @@ import { useFreshSipStore } from '@/lib/store';
 const HeroVideoScrubber = dynamic(() => import('./HeroVideoScrubber'), {
   ssr: false,
 });
-const HeroCanvas = dynamic(() => import('../3d/HeroCanvas'), {
+const HeroCanvas = dynamic(() => import('@/components/three-d/HeroCanvas'), {
   ssr: false,
 });
 
