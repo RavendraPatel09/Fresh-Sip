@@ -59,7 +59,13 @@ export function Showcase3DSection() {
           {/* Left Column: Interactive 3D Canvas */}
           <div className="lg:col-span-7 relative flex flex-col items-center">
             <div className="w-full relative">
-              <ProductShowcaseCanvas color={currentProduct.accentColor} fruitType={currentProduct.fruitType} />
+              <ProductShowcaseCanvas
+                color={currentProduct.accentColor}
+                fruitType={currentProduct.fruitType}
+                image={currentProduct.image}
+                name={currentProduct.name}
+                productId={currentProduct.id}
+              />
             </div>
           </div>
 
