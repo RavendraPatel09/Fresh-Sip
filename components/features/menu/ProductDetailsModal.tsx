@@ -43,14 +43,17 @@ export function ProductDetailsModal() {
             <X className="w-5 h-5" />
           </button>
 
-          {/* Left Column: Interactive 3D Canvas */}
+          {/* Left Column: Product Visual */}
           <div className="md:w-1/2 bg-gradient-to-br from-fresh-softBg to-white p-6 flex flex-col items-center justify-center relative min-h-[350px]">
             <div className="w-full relative">
-              <ProductShowcaseCanvas color={product.accentColor} fruitType={product.fruitType} />
+              <ProductShowcaseCanvas
+                color={product.accentColor}
+                fruitType={product.fruitType}
+                image={product.image}
+                name={product.name}
+                productId={product.id}
+              />
             </div>
-            <p className="text-[11px] text-gray-400 text-center mt-2">
-              🖱️ Drag bottle to rotate 360° • Pinch to zoom
-            </p>
           </div>
 
           {/* Right Column: Specifications & Purchasing Controls */}

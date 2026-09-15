@@ -16,6 +16,7 @@ import {
   Search,
   ArrowLeft,
   AlertTriangle,
+  Award,
 } from 'lucide-react';
 import { OrderStatus, Product } from '@/types';
 
@@ -59,67 +60,93 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-fresh-softBg text-fresh-charcoal">
       {/* Top Admin Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/"
-            className="p-2 rounded-xl bg-fresh-softBg hover:bg-gray-200 text-fresh-charcoal transition-colors flex items-center gap-1.5 text-xs font-semibold"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Exit to Store</span>
-          </Link>
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3.5 sticky top-0 z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          {/* Left Section: Exit to Store + FreshSip Brand & Admin Studio */}
+          <div className="flex items-center gap-3 shrink-0">
+            <Link
+              href="/"
+              className="p-2 rounded-xl bg-fresh-softBg hover:bg-gray-200 text-fresh-charcoal transition-colors flex items-center gap-1.5 text-xs font-semibold shrink-0"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Exit to Store</span>
+            </Link>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🍊</span>
-            <h1 className="font-display font-extrabold text-xl tracking-tight">
-              FreshSip <span className="text-fresh-orange">Admin Studio</span>
-            </h1>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-xl">🍊</span>
+              <h1 className="font-display font-extrabold text-base sm:text-xl tracking-tight whitespace-nowrap">
+                FreshSip <span className="text-fresh-orange">Admin Studio</span>
+              </h1>
+            </div>
+          </div>
+
+          {/* Center Section: Main Store Navigation */}
+          <nav className="hidden xl:flex items-center gap-5 text-xs font-semibold text-fresh-charcoal/90 shrink">
+            <Link href="/#home" className="hover:text-fresh-orange transition-colors whitespace-nowrap">
+              Home
+            </Link>
+            <Link href="/#showcase" className="hover:text-fresh-orange transition-colors whitespace-nowrap">
+              3D Experience
+            </Link>
+            <Link href="/#menu" className="hover:text-fresh-orange transition-colors whitespace-nowrap">
+              Menu
+            </Link>
+            <Link href="/#benefits" className="hover:text-fresh-orange transition-colors whitespace-nowrap">
+              Benefits
+            </Link>
+            <Link href="/#loyalty" className="hover:text-fresh-orange transition-colors flex items-center gap-1 whitespace-nowrap">
+              <Award className="w-3.5 h-3.5 text-fresh-orange" />
+              Rewards
+            </Link>
+            <Link href="/#about" className="hover:text-fresh-orange transition-colors whitespace-nowrap">
+              About
+            </Link>
+          </nav>
+
+          {/* Right Section: Admin Navigation */}
+          <div className="flex items-center gap-2 bg-fresh-softBg p-1.5 rounded-2xl border border-gray-200 overflow-x-auto max-w-full shrink-0">
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                activeTab === 'analytics'
+                  ? 'bg-fresh-charcoal text-white shadow-sm'
+                  : 'text-fresh-gray hover:text-fresh-charcoal'
+              }`}
+            >
+              Analytics
+            </button>
+            <button
+              onClick={() => setActiveTab('orders')}
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                activeTab === 'orders'
+                  ? 'bg-fresh-charcoal text-white shadow-sm'
+                  : 'text-fresh-gray hover:text-fresh-charcoal'
+              }`}
+            >
+              Orders ({orders.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('products')}
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                activeTab === 'products'
+                  ? 'bg-fresh-charcoal text-white shadow-sm'
+                  : 'text-fresh-gray hover:text-fresh-charcoal'
+              }`}
+            >
+              Products ({products.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('inventory')}
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                activeTab === 'inventory'
+                  ? 'bg-fresh-charcoal text-white shadow-sm'
+                  : 'text-fresh-gray hover:text-fresh-charcoal'
+              }`}
+            >
+              Inventory
+            </button>
           </div>
         </div>
-
-        {/* Tab Navigation */}
-        <nav className="flex items-center gap-2 bg-fresh-softBg p-1.5 rounded-2xl border border-gray-200">
-          <button
-            onClick={() => setActiveTab('analytics')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'analytics'
-                ? 'bg-fresh-charcoal text-white shadow-sm'
-                : 'text-fresh-gray hover:text-fresh-charcoal'
-            }`}
-          >
-            Analytics
-          </button>
-          <button
-            onClick={() => setActiveTab('orders')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'orders'
-                ? 'bg-fresh-charcoal text-white shadow-sm'
-                : 'text-fresh-gray hover:text-fresh-charcoal'
-            }`}
-          >
-            Orders ({orders.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('products')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'products'
-                ? 'bg-fresh-charcoal text-white shadow-sm'
-                : 'text-fresh-gray hover:text-fresh-charcoal'
-            }`}
-          >
-            Products ({products.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('inventory')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'inventory'
-                ? 'bg-fresh-charcoal text-white shadow-sm'
-                : 'text-fresh-gray hover:text-fresh-charcoal'
-            }`}
-          >
-            Inventory
-          </button>
-        </nav>
       </header>
 
       {/* Main Content Area */}

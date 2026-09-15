@@ -2,14 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ShoppingBag, Bot, Search, User, Menu as MenuIcon, X, Award } from 'lucide-react';
 import { useFreshSipStore } from '@/lib/store';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export function Navbar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  if (pathname === '/admin') {
+    return null;
+  }
 
   const cart = useFreshSipStore((state) => state.cart);
   const toggleCart = useFreshSipStore((state) => state.toggleCart);

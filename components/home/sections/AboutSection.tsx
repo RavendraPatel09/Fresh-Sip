@@ -13,20 +13,12 @@ export function AboutSection() {
           <div className="lg:col-span-6 relative">
             <div className="relative w-full h-[420px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
               <Image
-                src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='820' viewBox='0 0 1200 820'><rect width='1200' height='820' fill='%23FFF8EE'/><circle cx='600' cy='410' r='300' fill='%2352A447' opacity='0.2'/><text x='50%' y='45%' dominant-baseline='middle' text-anchor='middle' font-size='180'>🥬🍊🍉</text><text x='50%' y='70%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='48' fill='%2352A447'>100% Organic Cold-Pressed</text></svg>"
+                src="/brand-story-real.jpg"
                 alt="Fresh Fruit Cold Pressing"
                 fill
                 className="object-cover"
+                priority
               />
-            </div>
-            <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-3xl shadow-glass border border-gray-100 hidden sm:flex items-center gap-4 max-w-xs">
-              <div className="w-12 h-12 rounded-2xl bg-fresh-green/10 text-fresh-green flex items-center justify-center text-2xl font-bold shrink-0">
-                🌱
-              </div>
-              <div>
-                <h4 className="font-display font-bold text-fresh-charcoal text-sm">100% Organic</h4>
-                <p className="text-[11px] text-fresh-gray">Locally sourced from certified sustainable orchards.</p>
-              </div>
             </div>
           </div>
 
