@@ -3,8 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { Star, ShoppingBag, Eye, Heart, Flame } from 'lucide-react';
-import { Product } from '@/types';
-import { useFreshSipStore } from '@/lib/store';
+import { Product } from '@/shared';
+import { useFreshSipStore } from '@/frontend/state';
 import { motion } from 'framer-motion';
 
 interface ProductCardProps {

@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFreshSipStore } from '@/lib/store';
+import { useFreshSipStore } from '@/frontend/state';
 import { X, CheckCircle, CreditCard, MapPin, User, ShieldCheck, ArrowRight, Sparkles, Truck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Order } from '@/types';
+import { Order } from '@/shared';
 
 export function CheckoutModal() {
   const isCheckoutOpen = useFreshSipStore((state) => state.isCheckoutOpen);

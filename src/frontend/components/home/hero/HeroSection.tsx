@@ -3,12 +3,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { HeroTextOverlay } from './HeroTextOverlay';
-import { useFreshSipStore } from '@/lib/store';
+import { useFreshSipStore } from '@/frontend/state';
 
 const HeroVideoScrubber = dynamic(() => import('./HeroVideoScrubber'), {
   ssr: false,
 });
-const HeroCanvas = dynamic(() => import('@/components/three-d/HeroCanvas'), {
+const HeroCanvas = dynamic(() => import('@/frontend/components/three-d/HeroCanvas'), {
   ssr: false,
 });
 

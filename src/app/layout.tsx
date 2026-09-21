@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
-import { InitialLoader } from '@/components/layout/InitialLoader';
-import { ProductDetailsModal } from '@/components/features/menu/ProductDetailsModal';
-import { CartDrawer } from '@/components/features/cart/CartDrawer';
-import { CheckoutModal } from '@/components/features/checkout/CheckoutModal';
-import { FreshSipAIAssistant } from '@/components/features/ai/FreshSipAIAssistant';
-import { AuthModal } from '@/components/features/auth/AuthModal';
+import { Navbar } from '@/frontend/components/layout/Navbar';
+import { Footer } from '@/frontend/components/layout/Footer';
+import { InitialLoader } from '@/frontend/components/layout/InitialLoader';
+import { ProductDetailsModal } from '@/frontend/components/features/menu/ProductDetailsModal';
+import { CartDrawer } from '@/frontend/components/features/cart/CartDrawer';
+import { CheckoutModal } from '@/frontend/components/features/checkout/CheckoutModal';
+import { FreshSipAIAssistant } from '@/frontend/components/features/ai/FreshSipAIAssistant';
+import { AuthModal } from '@/frontend/components/features/auth/AuthModal';
 
 export const metadata: Metadata = {
   title: 'FreshSip Juice Bar — Fresh. Vibrant. Made for You.',

@@ -1,4 +1,4 @@
-import { Product } from '@/types';
+import { Product } from '@/shared';
 
 const SVG_IMAGES = {
   mango: '/mango-burst.jpg',

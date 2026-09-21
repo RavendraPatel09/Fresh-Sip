@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useFreshSipStore } from '@/lib/store';
-import { ProductCategory, HealthGoal } from '@/types';
+import { useFreshSipStore } from '@/frontend/state';
+import { ProductCategory, HealthGoal } from '@/shared';
 import { Search, Filter, RotateCcw } from 'lucide-react';
 
 const CATEGORIES: (ProductCategory | 'All')[] = [

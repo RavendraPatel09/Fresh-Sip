@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useFreshSipStore } from '@/lib/store';
+import { useFreshSipStore } from '@/frontend/state';
 import { X, Send, Bot, Sparkles, ShoppingBag, ArrowRight, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ShoppingBag, Bot, Search, User, Menu as MenuIcon, X, Award } from 'lucide-react';
-import { useFreshSipStore } from '@/lib/store';
+import { useFreshSipStore } from '@/frontend/state';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export function Navbar() {

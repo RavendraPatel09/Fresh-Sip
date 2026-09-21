@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useFreshSipStore } from '@/lib/store';
+import { useFreshSipStore } from '@/frontend/state';
 import { ProductCard } from './ProductCard';
 import { ProductFilters } from './ProductFilters';
 import { motion } from 'framer-motion';

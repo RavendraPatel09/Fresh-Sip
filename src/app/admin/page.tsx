@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useFreshSipStore } from '@/lib/store';
+import { useFreshSipStore } from '@/frontend/state';
 import {
   Package,
   ShoppingBag,
@@ -18,7 +18,7 @@ import {
   AlertTriangle,
   Award,
 } from 'lucide-react';
-import { OrderStatus, Product } from '@/types';
+import { OrderStatus, Product } from '@/shared';
 
 export default function AdminDashboard() {
   const products = useFreshSipStore((state) => state.products);

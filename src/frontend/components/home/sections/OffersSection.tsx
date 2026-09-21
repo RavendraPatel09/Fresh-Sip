@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Tag, Sparkles, ArrowRight, Gift } from 'lucide-react';
-import { useFreshSipStore } from '@/lib/store';
+import { useFreshSipStore } from '@/frontend/state';
 
 const OFFERS = [
   {

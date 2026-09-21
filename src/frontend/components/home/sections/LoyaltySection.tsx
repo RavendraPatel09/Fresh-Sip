@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useFreshSipStore } from '@/lib/store';
+import { useFreshSipStore } from '@/frontend/state';
 import { Award, Gift, Sparkles, Zap, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 

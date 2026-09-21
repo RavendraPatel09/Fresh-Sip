@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
-import { useFreshSipStore } from '@/lib/store';
+import { useFreshSipStore } from '@/frontend/state';
 import { ShoppingBag, Flame } from 'lucide-react';
-import { ProductSize } from '@/types';
+import { ProductSize } from '@/shared';
 
-const ProductShowcaseCanvas = dynamic(() => import('@/components/three-d/ProductShowcaseCanvas'), {
+const ProductShowcaseCanvas = dynamic(() => import('@/frontend/components/three-d/ProductShowcaseCanvas'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-[400px] flex items-center justify-center text-gray-400 text-sm">

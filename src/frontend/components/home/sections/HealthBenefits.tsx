@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFreshSipStore } from '@/lib/store';
-import { HealthGoal } from '@/types';
+import { useFreshSipStore } from '@/frontend/state';
+import { HealthGoal } from '@/shared';
 import { Zap, Shield, Droplets, Leaf, Activity, Dumbbell, Sparkles, ArrowRight, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
