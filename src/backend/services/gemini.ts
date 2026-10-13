@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { SAMPLE_PRODUCTS } from '@/shared/data/productsData';
-import { Product } from '@/shared';
+import { SAMPLE_PRODUCTS } from '@/frontend/shared/data/productsData';
+import { Product } from '@/frontend/shared';
 
 // Structured system prompt to ensure grounded responses
 const SYSTEM_PROMPT = `

@@ -1,4 +1,4 @@
-import { Product } from '@/shared';
+import { Product } from '@/frontend/shared';
 
 const SVG_IMAGES = {
   mango: '/mango-burst.jpg',
