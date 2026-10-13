@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { useFreshSipStore } from '@/frontend/state';
 import { ShoppingBag, Flame } from 'lucide-react';
-import { ProductSize } from '@/shared';
+import { ProductSize } from '@/frontend/shared';
 
 const ProductShowcaseCanvas = dynamic(() => import('@/frontend/components/three-d/ProductShowcaseCanvas'), {
   ssr: false,

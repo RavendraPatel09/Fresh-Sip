@@ -5,7 +5,7 @@ import { useFreshSipStore } from '@/frontend/state';
 import { X, CheckCircle, CreditCard, MapPin, User, ShieldCheck, ArrowRight, Sparkles, Truck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Order } from '@/shared';
+import { Order } from '@/frontend/shared';
 
 export function CheckoutModal() {
   const isCheckoutOpen = useFreshSipStore((state) => state.isCheckoutOpen);

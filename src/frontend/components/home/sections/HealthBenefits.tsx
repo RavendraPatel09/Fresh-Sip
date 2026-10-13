@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useFreshSipStore } from '@/frontend/state';
-import { HealthGoal } from '@/shared';
+import { HealthGoal } from '@/frontend/shared';
 import { Zap, Shield, Droplets, Leaf, Activity, Dumbbell, Sparkles, ArrowRight, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

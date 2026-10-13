@@ -18,7 +18,7 @@ import {
   AlertTriangle,
   Award,
 } from 'lucide-react';
-import { OrderStatus, Product } from '@/shared';
+import { OrderStatus, Product } from '@/frontend/shared';
 
 export default function AdminDashboard() {
   const products = useFreshSipStore((state) => state.products);

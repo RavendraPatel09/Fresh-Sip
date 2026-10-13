@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useFreshSipStore } from '@/frontend/state';
 import { X, ShoppingBag, Star, Flame, Check, ShieldCheck, Heart } from 'lucide-react';
-import { ProductSize } from '@/shared';
+import { ProductSize } from '@/frontend/shared';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ProductShowcaseCanvas = dynamic(() => import('@/frontend/components/three-d/ProductShowcaseCanvas'), {

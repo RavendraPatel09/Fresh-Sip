@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Star, ShoppingBag, Eye, Heart, Flame } from 'lucide-react';
-import { Product } from '@/shared';
+import { Product } from '@/frontend/shared';
 import { useFreshSipStore } from '@/frontend/state';
 import { motion } from 'framer-motion';
 

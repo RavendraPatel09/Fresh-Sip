@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useFreshSipStore } from '@/frontend/state';
-import { ProductCategory, HealthGoal } from '@/shared';
+import { ProductCategory, HealthGoal } from '@/frontend/shared';
 import { Search, Filter, RotateCcw } from 'lucide-react';
 
 const CATEGORIES: (ProductCategory | 'All')[] = [
