@@ -364,6 +364,13 @@ export function CheckoutModal() {
                     ))}
                   </div>
 
+                  {errorMessage && (
+                    <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-center gap-2">
+                      <X className="w-4 h-4 shrink-0 text-red-500" />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
+
                   <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
                     <div>
                       <span className="text-[10px] text-gray-400 block font-medium">Final Amount</span>
