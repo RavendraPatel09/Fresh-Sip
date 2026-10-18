@@ -13,23 +13,37 @@ export function CheckoutModal() {
   const cart = useFreshSipStore((state) => state.cart);
   const user = useFreshSipStore((state) => state.user);
   const discountPercentage = useFreshSipStore((state) => state.discountPercentage);
+  const couponCode = useFreshSipStore((state) => state.couponCode);
   const placeOrder = useFreshSipStore((state) => state.placeOrder);
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [paymentMethod, setPaymentMethod] = useState<'Razorpay' | 'Stripe' | 'Cash on Delivery'>('Razorpay');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
 
   // Form Fields
   const [formData, setFormData] = useState({
-    name: user?.name || 'Alex Morgan',
-    email: user?.email || 'alex@freshsip.com',
-    phone: '+91 98765 43210',
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: user?.phone || '+91 98765 43210',
     address: '42 Ocean Drive, Apt 4B',
     city: 'Mumbai',
     state: 'Maharashtra',
     zip: '400050',
   });
+
+  // Sync form if user logs in
+  React.useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        name: user.name || prev.name,
+        email: user.email || prev.email,
+        phone: user.phone || prev.phone,
+      }));
+    }
+  }, [user]);
 
   if (!isCheckoutOpen) return null;
 
@@ -38,12 +52,39 @@ export function CheckoutModal() {
   const deliveryFee = subtotal > 500 ? 0 : 40;
   const total = Math.max(0, subtotal - discountAmount + deliveryFee);
 
-  const handlePayAndConfirm = () => {
+  const handlePayAndConfirm = async () => {
     setIsProcessing(true);
-    setTimeout(() => {
-      const newOrder = placeOrder(formData, paymentMethod);
-      setIsProcessing(false);
+    setErrorMessage(null);
+
+    try {
+      // 1. Authoritative order placement on server
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart,
+          customerInfo: formData,
+          paymentMethod,
+          couponCode,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMessage(data.error || 'Failed to place order.');
+        setIsProcessing(false);
+        return;
+      }
+
+      // 2. Sync state with created authoritative order
+      const newOrder = data.order;
       setCompletedOrder(newOrder);
+
+      // Also invoke placeOrder store updater to update local cart & orders
+      placeOrder(formData, paymentMethod);
+
+      setIsProcessing(false);
 
       // Trigger Confetti Celebration
       confetti({
@@ -51,12 +92,23 @@ export function CheckoutModal() {
         spread: 80,
         origin: { y: 0.6 },
       });
-    }, 1800);
+    } catch {
+      // Graceful local order fallback if offline
+      const localOrder = placeOrder(formData, paymentMethod);
+      setCompletedOrder(localOrder);
+      setIsProcessing(false);
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 },
+      });
+    }
   };
 
   const handleClose = () => {
     setCompletedOrder(null);
     setStep(1);
+    setErrorMessage(null);
     toggleCheckout(false);
   };
 

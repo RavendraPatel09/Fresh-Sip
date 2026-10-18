@@ -65,8 +65,10 @@ interface FreshSipState {
   updateOrderStatus: (orderId: string, status: OrderStatus) => void;
 
   // Actions - User & Auth
+  setUser: (user: UserProfile | null) => void;
+  refreshSession: () => Promise<void>;
   login: (name: string, email: string) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   toggleFavorite: (productId: string) => void;
 }
 
@@ -127,15 +129,7 @@ export const useFreshSipStore = create<FreshSipState>()(
       // UI
       isAIOpen: false,
       isAuthOpen: false,
-      user: {
-        id: 'usr-1',
-        name: 'Alex Morgan',
-        email: 'alex@freshsip.com',
-        loyaltyPoints: 680,
-        loyaltyTier: 'Zesty',
-        addresses: [],
-        favorites: ['mango-burst', 'green-detox'],
-      },
+      user: null,
 
       // Product Actions
       setActiveCategory: (category) => set({ activeCategory: category }),
@@ -317,6 +311,18 @@ export const useFreshSipStore = create<FreshSipState>()(
         })),
 
       // Auth & Profile
+      setUser: (user) => set({ user }),
+      refreshSession: async () => {
+        try {
+          const res = await fetch('/api/auth/session');
+          if (res.ok) {
+            const data = await res.json();
+            set({ user: data.user || null });
+          }
+        } catch (e) {
+          console.error('Failed to sync session:', e);
+        }
+      },
       login: (name, email) =>
         set({
           user: {
@@ -330,7 +336,14 @@ export const useFreshSipStore = create<FreshSipState>()(
           },
           isAuthOpen: false,
         }),
-      logout: () => set({ user: null, isAuthOpen: false }),
+      logout: async () => {
+        try {
+          await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (e) {
+          console.error('Logout error:', e);
+        }
+        set({ user: null, isAuthOpen: false });
+      },
 
       toggleFavorite: (productId) =>
         set((state) => {
