@@ -1,5 +1,36 @@
+# Dependencies
 node_modules
-.next
+/.pnp
+.pnp.js
+
+# Next.js Build Output
+.next/
+out/
+build/
+dist/
+
+# NPM Cache
 .npm
 .npm-cache
 npm-cache
+
+# Environment Variables & Secrets (NEVER COMMIT SENSITIVE CREDENTIALS)
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database & runtime data
+data/*.json
+data/*.tmp.json
+*.db
+*.sqlite
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# TypeScript Build Info
+*.tsbuildinfo
+next-env.d.ts

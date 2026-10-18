@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getCurrentUser, sanitizeUser } from '@/backend/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const user = await getCurrentUser();

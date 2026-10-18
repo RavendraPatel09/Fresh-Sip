@@ -3,6 +3,8 @@ import { getCurrentUser } from '@/backend/lib/auth';
 import { updatePassword } from '@/backend/db';
 import { hashPassword, verifyPassword } from '@/backend/lib/crypto';
 
+export const dynamic = 'force-dynamic';
+
 export async function PUT(req: Request) {
   try {
     const user = await getCurrentUser();

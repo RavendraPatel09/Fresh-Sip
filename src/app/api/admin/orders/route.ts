@@ -3,6 +3,8 @@ import { getAllOrders, updateOrderStatus } from '@/backend/db';
 import { requireAdmin } from '@/backend/lib/auth';
 import { OrderStatus } from '@/frontend/shared';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     // Server-enforced administrator authorization

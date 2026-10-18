@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getCurrentUser, sanitizeUser } from '@/backend/lib/auth';
 import { updateUser } from '@/backend/db';
 
+export const dynamic = 'force-dynamic';
+
 export async function PUT(req: Request) {
   try {
     const user = await getCurrentUser();

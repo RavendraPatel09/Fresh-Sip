@@ -3,6 +3,8 @@ import { createOrder, getAllProducts, getOrdersByUserId } from '@/backend/db';
 import { getCurrentUser } from '@/backend/lib/auth';
 import { Order, CartItem, ProductSize, OrderStatus } from '@/frontend/shared';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     const user = await getCurrentUser();

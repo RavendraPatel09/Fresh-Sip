@@ -1,39 +1,152 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useFreshSipStore } from '@/frontend/state';
 import {
   Package,
   ShoppingBag,
   TrendingUp,
-  Users,
   Plus,
-  Edit,
   Trash2,
-  CheckCircle,
-  Clock,
   Search,
   ArrowLeft,
-  AlertTriangle,
   Award,
+  ShieldCheck,
+  Lock,
+  Mail,
+  RefreshCw,
+  AlertCircle,
+  CheckCircle,
 } from 'lucide-react';
-import { OrderStatus, Product } from '@/frontend/shared';
+import { OrderStatus, Product, Order } from '@/frontend/shared';
 
 export default function AdminDashboard() {
+  const user = useFreshSipStore((state) => state.user);
+  const setUser = useFreshSipStore((state) => state.setUser);
+  const refreshSession = useFreshSipStore((state) => state.refreshSession);
   const products = useFreshSipStore((state) => state.products);
-  const orders = useFreshSipStore((state) => state.orders);
-  const addProduct = useFreshSipStore((state) => state.addProduct);
-  const deleteProduct = useFreshSipStore((state) => state.deleteProduct);
-  const updateOrderStatus = useFreshSipStore((state) => state.updateOrderStatus);
+  const localOrders = useFreshSipStore((state) => state.orders);
+  const updateStoreOrderStatus = useFreshSipStore((state) => state.updateOrderStatus);
+  const deleteStoreProduct = useFreshSipStore((state) => state.deleteProduct);
 
   const [activeTab, setActiveTab] = useState<'analytics' | 'products' | 'orders' | 'inventory'>('analytics');
   const [orderSearch, setOrderSearch] = useState('');
   const [productSearch, setProductSearch] = useState('');
 
+  // Admin login gate states
+  const [adminEmail, setAdminEmail] = useState('admin@freshsip.com');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  // Live admin orders & products
+  const [adminOrders, setAdminOrders] = useState<Order[]>(localOrders);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null);
+
+  useEffect(() => {
+    refreshSession();
+  }, [refreshSession]);
+
+  // Fetch live admin orders when authorized
+  useEffect(() => {
+    if (user?.role === 'admin') {
+      fetchAdminData();
+    }
+  }, [user]);
+
+  const fetchAdminData = async () => {
+    setIsSyncing(true);
+    try {
+      const res = await fetch('/api/admin/orders');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.orders) {
+          setAdminOrders(data.orders);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to sync admin orders:', e);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError(null);
+    setLoginLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: adminEmail.trim(), password: adminPassword }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setLoginError(data.error || 'Invalid credentials.');
+        return;
+      }
+
+      if (data.user?.role !== 'admin') {
+        setLoginError('Access denied: Administrator privileges are required to enter the Admin Studio.');
+        setUser(data.user);
+        return;
+      }
+
+      setUser(data.user);
+      setAdminPassword('');
+      fetchAdminData();
+    } catch {
+      setLoginError('Network error. Unable to verify administrator credentials.');
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (orderId: string, status: OrderStatus) => {
+    try {
+      const res = await fetch('/api/admin/orders', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId, status }),
+      });
+      if (res.ok) {
+        setAdminOrders((prev) =>
+          prev.map((o) => (o.id === orderId ? { ...o, orderStatus: status } : o))
+        );
+        updateStoreOrderStatus(orderId, status);
+        setActionSuccess(`Order ${orderId} updated to ${status}`);
+        setTimeout(() => setActionSuccess(null), 3000);
+      }
+    } catch (e) {
+      console.error('Status update failed:', e);
+    }
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    if (!confirm('Are you sure you want to remove this product from the menu catalog?')) return;
+    try {
+      const res = await fetch(`/api/admin/products?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        deleteStoreProduct(id);
+        setActionSuccess('Product removed from catalog.');
+        setTimeout(() => setActionSuccess(null), 3000);
+      }
+    } catch (e) {
+      console.error('Delete product failed:', e);
+    }
+  };
+
   // Stats Calculations
-  const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
-  const totalOrders = orders.length;
+  const displayOrders = adminOrders.length > 0 ? adminOrders : localOrders;
+  const totalRevenue = displayOrders.reduce((sum, o) => sum + o.total, 0);
+  const totalOrders = displayOrders.length;
   const avgOrderValue = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
   const activeProducts = products.filter((p) => p.available).length;
 
@@ -57,11 +170,95 @@ export default function AdminDashboard() {
     'Cancelled',
   ];
 
+  // -------------------------------------------------------------
+  // ADMIN AUTHENTICATION GATE (When not authorized as Admin)
+  // -------------------------------------------------------------
+  if (!user || user.role !== 'admin') {
+    return (
+      <div className="min-h-screen bg-fresh-softBg flex flex-col justify-center items-center p-4 sm:p-6 text-fresh-charcoal">
+        <div className="max-w-md w-full bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-xl space-y-6">
+          <div className="text-center space-y-2">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-fresh-orange to-fresh-charcoal flex items-center justify-center text-3xl mx-auto shadow-md text-white">
+              <Lock className="w-8 h-8" />
+            </div>
+            <h2 className="font-display font-extrabold text-2xl text-fresh-charcoal">
+              FreshSip Admin Studio
+            </h2>
+            <p className="text-xs text-fresh-gray">
+              This administrative portal is protected. Please sign in with an authorized administrator account to continue.
+            </p>
+          </div>
+
+          {loginError && (
+            <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+              <span>{loginError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleAdminLogin} className="space-y-4">
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-fresh-charcoal block">Administrator Email</label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="email"
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  required
+                  placeholder="admin@freshsip.com"
+                  className="w-full pl-10 pr-4 py-2.5 bg-fresh-softBg rounded-xl text-xs font-medium border border-gray-200 focus:outline-none focus:border-fresh-orange"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-fresh-charcoal block">Admin Password</label>
+              <div className="relative">
+                <Lock className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="password"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  required
+                  placeholder="Enter administrator password"
+                  className="w-full pl-10 pr-4 py-2.5 bg-fresh-softBg rounded-xl text-xs font-medium border border-gray-200 focus:outline-none focus:border-fresh-orange"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loginLoading}
+              className="w-full py-3.5 rounded-2xl bg-fresh-charcoal text-white font-semibold text-xs hover:bg-fresh-orange shadow-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {loginLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
+              <span>{loginLoading ? 'Authenticating...' : 'Sign In as Administrator'}</span>
+            </button>
+          </form>
+
+          <div className="pt-4 border-t border-gray-100 text-center">
+            <Link
+              href="/"
+              className="text-xs font-semibold text-fresh-gray hover:text-fresh-charcoal inline-flex items-center gap-1.5"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Return to Public FreshSip Store</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // -------------------------------------------------------------
+  // AUTHORIZED ADMIN STUDIO DASHBOARD
+  // -------------------------------------------------------------
   return (
     <div className="min-h-screen bg-fresh-softBg text-fresh-charcoal">
-      {/* Top Admin Header */}
-      <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3.5 sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* Top Admin Header with layout fix for no overlap on any screen */}
+      <header className="bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 sm:px-6 py-3 sticky top-0 z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
           {/* Left Section: Exit to Store + FreshSip Brand & Admin Studio */}
           <div className="flex items-center gap-3 shrink-0">
             <Link
@@ -81,7 +278,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Center Section: Main Store Navigation */}
-          <nav className="hidden xl:flex items-center gap-5 text-xs font-semibold text-fresh-charcoal/90 shrink">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-xs font-semibold text-fresh-charcoal/90 shrink">
             <Link href="/#home" className="hover:text-fresh-orange transition-colors whitespace-nowrap">
               Home
             </Link>
@@ -104,10 +301,10 @@ export default function AdminDashboard() {
           </nav>
 
           {/* Right Section: Admin Navigation */}
-          <div className="flex items-center gap-2 bg-fresh-softBg p-1.5 rounded-2xl border border-gray-200 overflow-x-auto max-w-full shrink-0">
+          <div className="flex items-center gap-1.5 bg-fresh-softBg p-1.5 rounded-2xl border border-gray-200 overflow-x-auto max-w-full shrink-0">
             <button
               onClick={() => setActiveTab('analytics')}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                 activeTab === 'analytics'
                   ? 'bg-fresh-charcoal text-white shadow-sm'
                   : 'text-fresh-gray hover:text-fresh-charcoal'
@@ -117,17 +314,17 @@ export default function AdminDashboard() {
             </button>
             <button
               onClick={() => setActiveTab('orders')}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                 activeTab === 'orders'
                   ? 'bg-fresh-charcoal text-white shadow-sm'
                   : 'text-fresh-gray hover:text-fresh-charcoal'
               }`}
             >
-              Orders ({orders.length})
+              Orders ({displayOrders.length})
             </button>
             <button
               onClick={() => setActiveTab('products')}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                 activeTab === 'products'
                   ? 'bg-fresh-charcoal text-white shadow-sm'
                   : 'text-fresh-gray hover:text-fresh-charcoal'
@@ -137,7 +334,7 @@ export default function AdminDashboard() {
             </button>
             <button
               onClick={() => setActiveTab('inventory')}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
                 activeTab === 'inventory'
                   ? 'bg-fresh-charcoal text-white shadow-sm'
                   : 'text-fresh-gray hover:text-fresh-charcoal'
@@ -150,13 +347,20 @@ export default function AdminDashboard() {
       </header>
 
       {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto p-6 space-y-8">
+      <main className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
+        {actionSuccess && (
+          <div className="p-3 bg-green-50 border border-green-200 text-fresh-green text-xs rounded-2xl flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 shrink-0" />
+            <span>{actionSuccess}</span>
+          </div>
+        )}
+
         {/* STATS OVERVIEW CARDS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm flex items-center justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="bg-white p-5 sm:p-6 rounded-3xl border border-gray-200/80 shadow-sm flex items-center justify-between">
             <div>
               <span className="text-xs text-fresh-gray font-medium block">Total Revenue</span>
-              <span className="text-3xl font-display font-extrabold text-fresh-charcoal mt-1 block">
+              <span className="text-2xl sm:text-3xl font-display font-extrabold text-fresh-charcoal mt-1 block">
                 ₹{totalRevenue}
               </span>
             </div>
@@ -165,10 +369,10 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm flex items-center justify-between">
+          <div className="bg-white p-5 sm:p-6 rounded-3xl border border-gray-200/80 shadow-sm flex items-center justify-between">
             <div>
               <span className="text-xs text-fresh-gray font-medium block">Total Orders</span>
-              <span className="text-3xl font-display font-extrabold text-fresh-charcoal mt-1 block">
+              <span className="text-2xl sm:text-3xl font-display font-extrabold text-fresh-charcoal mt-1 block">
                 {totalOrders}
               </span>
             </div>
@@ -177,10 +381,10 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm flex items-center justify-between">
+          <div className="bg-white p-5 sm:p-6 rounded-3xl border border-gray-200/80 shadow-sm flex items-center justify-between">
             <div>
               <span className="text-xs text-fresh-gray font-medium block">Avg. Order Value</span>
-              <span className="text-3xl font-display font-extrabold text-fresh-charcoal mt-1 block">
+              <span className="text-2xl sm:text-3xl font-display font-extrabold text-fresh-charcoal mt-1 block">
                 ₹{avgOrderValue}
               </span>
             </div>
@@ -189,10 +393,10 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-gray-200/80 shadow-sm flex items-center justify-between">
+          <div className="bg-white p-5 sm:p-6 rounded-3xl border border-gray-200/80 shadow-sm flex items-center justify-between">
             <div>
               <span className="text-xs text-fresh-gray font-medium block">Active Juices</span>
-              <span className="text-3xl font-display font-extrabold text-fresh-charcoal mt-1 block">
+              <span className="text-2xl sm:text-3xl font-display font-extrabold text-fresh-charcoal mt-1 block">
                 {activeProducts}
               </span>
             </div>
@@ -204,11 +408,14 @@ export default function AdminDashboard() {
 
         {/* TAB 1: ANALYTICS */}
         {activeTab === 'analytics' && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
             <div className="lg:col-span-8 bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm space-y-6">
-              <h3 className="font-display font-extrabold text-xl text-fresh-charcoal">
-                Weekly Revenue Progression
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="font-display font-extrabold text-xl text-fresh-charcoal">
+                  Weekly Revenue Progression
+                </h3>
+                {isSyncing && <RefreshCw className="w-4 h-4 text-gray-400 animate-spin" />}
+              </div>
               <div className="h-64 flex items-end justify-between gap-4 pt-8 px-4 border-b border-gray-200 pb-2">
                 {[
                   { day: 'Mon', val: 3200 },
@@ -256,11 +463,21 @@ export default function AdminDashboard() {
 
         {/* TAB 2: ORDERS MANAGEMENT */}
         {activeTab === 'orders' && (
-          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 space-y-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <h3 className="font-display font-extrabold text-xl text-fresh-charcoal">
-                Customer Orders ({orders.length})
-              </h3>
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-4 sm:p-6 space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <h3 className="font-display font-extrabold text-xl text-fresh-charcoal">
+                  Customer Orders ({displayOrders.length})
+                </h3>
+                <button
+                  onClick={fetchAdminData}
+                  className="p-1.5 text-gray-400 hover:text-fresh-charcoal transition-colors"
+                  title="Refresh Orders"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                </button>
+              </div>
+
               <div className="relative w-full sm:w-72">
                 <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
@@ -274,7 +491,7 @@ export default function AdminDashboard() {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+              <table className="w-full text-left text-xs min-w-[650px]">
                 <thead>
                   <tr className="border-b border-gray-200 text-gray-400 font-bold uppercase tracking-wider text-[10px]">
                     <th className="pb-3">Order ID</th>
@@ -283,11 +500,11 @@ export default function AdminDashboard() {
                     <th className="pb-3">Total</th>
                     <th className="pb-3">Payment</th>
                     <th className="pb-3">Status</th>
-                    <th className="pb-3">Actions</th>
+                    <th className="pb-3">Update Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {orders
+                  {displayOrders
                     .filter((o) =>
                       o.id.toLowerCase().includes(orderSearch.toLowerCase()) ||
                       o.customerName.toLowerCase().includes(orderSearch.toLowerCase())
@@ -299,21 +516,21 @@ export default function AdminDashboard() {
                           {ord.customerName}
                           <span className="text-[10px] text-gray-400 block">{ord.customerEmail}</span>
                         </td>
-                        <td className="py-4 text-fresh-gray">
+                        <td className="py-4 text-fresh-gray max-w-xs truncate">
                           {ord.items.map((i) => `${i.quantity}x ${i.product.name}`).join(', ')}
                         </td>
                         <td className="py-4 font-extrabold text-fresh-charcoal">₹{ord.total}</td>
                         <td className="py-4 font-medium text-fresh-gray">{ord.paymentMethod}</td>
                         <td className="py-4">
-                          <span className={`px-3 py-1 rounded-full text-[10px] font-bold border ${STATUS_COLORS[ord.orderStatus]}`}>
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${STATUS_COLORS[ord.orderStatus]}`}>
                             {ord.orderStatus}
                           </span>
                         </td>
                         <td className="py-4">
                           <select
                             value={ord.orderStatus}
-                            onChange={(e) => updateOrderStatus(ord.id, e.target.value as OrderStatus)}
-                            className="px-2 py-1 bg-white border border-gray-200 rounded-lg text-xs font-semibold focus:outline-none"
+                            onChange={(e) => handleStatusChange(ord.id, e.target.value as OrderStatus)}
+                            className="px-2 py-1 bg-white border border-gray-200 rounded-lg text-xs font-semibold focus:outline-none cursor-pointer"
                           >
                             {ALL_STATUSES.map((st) => (
                               <option key={st} value={st}>
@@ -330,54 +547,62 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* TAB 3: PRODUCTS MANAGEMENT */}
+        {/* TAB 3: PRODUCTS CATALOG */}
         {activeTab === 'products' && (
-          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 space-y-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-4 sm:p-6 space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <h3 className="font-display font-extrabold text-xl text-fresh-charcoal">
                 Juice Menu Catalog ({products.length})
               </h3>
-              <button className="px-5 py-2.5 rounded-xl bg-fresh-orange text-white text-xs font-bold flex items-center gap-1.5 shadow-sm">
-                <Plus className="w-4 h-4" />
-                <span>Add New Juice</span>
-              </button>
+              <div className="relative w-full sm:w-64">
+                <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search catalog..."
+                  value={productSearch}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 bg-fresh-softBg rounded-xl text-xs text-fresh-charcoal focus:outline-none"
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {products.map((prod) => (
-                <div key={prod.id} className="bg-fresh-softBg rounded-2xl p-4 border border-gray-200 flex justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-14 h-14 rounded-xl overflow-hidden relative bg-white border border-gray-100 shrink-0">
-                      <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" />
+              {products
+                .filter((p) => p.name.toLowerCase().includes(productSearch.toLowerCase()))
+                .map((prod) => (
+                  <div key={prod.id} className="bg-fresh-softBg rounded-2xl p-4 border border-gray-200 flex justify-between gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-14 h-14 rounded-xl overflow-hidden relative bg-white border border-gray-100 shrink-0">
+                        <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="truncate">
+                        <h4 className="font-bold text-sm text-fresh-charcoal truncate">{prod.name}</h4>
+                        <span className="text-[10px] text-fresh-orange font-bold block">{prod.category}</span>
+                        <span className="text-xs font-extrabold text-fresh-charcoal block mt-0.5">₹{prod.price}</span>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-sm text-fresh-charcoal">{prod.name}</h4>
-                      <span className="text-[10px] text-fresh-orange font-bold">{prod.category}</span>
-                      <span className="text-xs font-extrabold text-fresh-charcoal block mt-0.5">₹{prod.price}</span>
-                    </div>
-                  </div>
 
-                  <div className="flex flex-col justify-between items-end">
-                    <button
-                      onClick={() => deleteProduct(prod.id)}
-                      className="p-1.5 text-gray-400 hover:text-fresh-pink transition-colors"
-                      title="Delete Product"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                    <span className="px-2 py-0.5 rounded-md bg-fresh-green/10 text-fresh-green text-[10px] font-bold">
-                      {prod.stock} in stock
-                    </span>
+                    <div className="flex flex-col justify-between items-end shrink-0">
+                      <button
+                        onClick={() => handleDeleteProduct(prod.id)}
+                        className="p-1.5 text-gray-400 hover:text-fresh-pink transition-colors cursor-pointer"
+                        title="Delete Product"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                      <span className="px-2 py-0.5 rounded-md bg-fresh-green/10 text-fresh-green text-[10px] font-bold">
+                        {prod.stock} in stock
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         )}
 
         {/* TAB 4: INVENTORY TRACKER */}
         {activeTab === 'inventory' && (
-          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 space-y-6">
+          <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-4 sm:p-6 space-y-6">
             <h3 className="font-display font-extrabold text-xl text-fresh-charcoal">
               Fruit & Bottle Raw Inventory
             </h3>
