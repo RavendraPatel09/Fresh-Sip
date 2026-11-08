@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Product, CartItem, ProductSize, Order, OrderStatus, UserProfile, HealthGoal, ProductCategory, LoyaltyTier } from '@/frontend/shared';
 import { SAMPLE_PRODUCTS } from '@/frontend/shared/data/productsData';
-
 interface FreshSipState {
   // Products
   products: Product[];
